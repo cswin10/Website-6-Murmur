@@ -91,14 +91,14 @@ export function VisualScene({ playing, volumes }) {
 
 function getBaseGradient(dominantId) {
   const gradients = {
-    rain: 'linear-gradient(135deg, #0f1520 0%, #1a2535 50%, #0f1520 100%)',
-    thunder: 'linear-gradient(135deg, #15121f 0%, #1f1a2f 50%, #15121f 100%)',
-    fire: 'linear-gradient(135deg, #1a1510 0%, #251a10 50%, #1a1510 100%)',
-    forest: 'linear-gradient(135deg, #101a15 0%, #152515 50%, #101a15 100%)',
-    waves: 'linear-gradient(135deg, #101520 0%, #152530 50%, #101520 100%)',
-    cafe: 'linear-gradient(135deg, #1a1512 0%, #251a12 50%, #1a1512 100%)',
-    wind: 'linear-gradient(135deg, #121518 0%, #1a1f25 50%, #121518 100%)',
-    night: 'linear-gradient(135deg, #0f0f1a 0%, #15152a 50%, #0f0f1a 100%)',
+    rain: 'linear-gradient(180deg, #0a1525 0%, #152540 40%, #0d1a30 100%)',
+    thunder: 'linear-gradient(180deg, #12101f 0%, #1a1535 40%, #0f0d1a 100%)',
+    fire: 'linear-gradient(180deg, #1a1008 0%, #251510 40%, #120a05 100%)',
+    forest: 'linear-gradient(180deg, #0a150d 0%, #152518 40%, #0d1a10 100%)',
+    waves: 'linear-gradient(180deg, #081520 0%, #0f2535 40%, #0a1a28 100%)',
+    cafe: 'linear-gradient(180deg, #181008 0%, #201510 40%, #140c06 100%)',
+    wind: 'linear-gradient(180deg, #101318 0%, #181d25 40%, #0d1015 100%)',
+    night: 'linear-gradient(180deg, #08081a 0%, #101028 40%, #0a0a18 100%)',
   };
-  return gradients[dominantId] || 'linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 100%)';
+  return gradients[dominantId] || 'linear-gradient(180deg, #0a0a0a 0%, #151515 100%)';
 }
