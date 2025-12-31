@@ -9,19 +9,16 @@
 .scene-base {
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 100%);
+  background: linear-gradient(135deg, #0a0a0a 0%, #151515 100%);
   transition: background 2s ease;
 }
 
-/* Rain effect */
+/* ==================== RAIN ==================== */
 .scene-rain {
   position: absolute;
   inset: 0;
   opacity: 0;
-  transition: opacity 1s ease;
-  background: linear-gradient(to bottom,
-    rgba(100, 150, 200, 0.05) 0%,
-    rgba(50, 100, 150, 0.1) 100%);
+  transition: opacity 1.5s ease;
   pointer-events: none;
 }
 
@@ -29,76 +26,175 @@
   opacity: 1;
 }
 
+/* Rain gradient overlay */
 .scene-rain::before {
   content: '';
   position: absolute;
   inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cline x1='10' y1='0' x2='10' y2='15' stroke='rgba(150,180,220,0.3)' stroke-width='1'/%3E%3Cline x1='30' y1='5' x2='30' y2='20' stroke='rgba(150,180,220,0.2)' stroke-width='1'/%3E%3Cline x1='50' y1='2' x2='50' y2='17' stroke='rgba(150,180,220,0.25)' stroke-width='1'/%3E%3Cline x1='70' y1='8' x2='70' y2='23' stroke='rgba(150,180,220,0.2)' stroke-width='1'/%3E%3Cline x1='90' y1='3' x2='90' y2='18' stroke='rgba(150,180,220,0.3)' stroke-width='1'/%3E%3C/svg%3E");
-  background-size: 100px 100px;
-  animation: rain-fall 0.5s linear infinite;
+  background:
+    linear-gradient(180deg,
+      rgba(60, 100, 150, 0.15) 0%,
+      rgba(40, 80, 130, 0.25) 50%,
+      rgba(30, 60, 100, 0.3) 100%);
+}
+
+/* Animated rain streaks */
+.scene-rain::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    repeating-linear-gradient(
+      180deg,
+      transparent 0px,
+      transparent 4px,
+      rgba(140, 180, 220, 0.08) 4px,
+      rgba(140, 180, 220, 0.08) 6px
+    ),
+    repeating-linear-gradient(
+      180deg,
+      transparent 0px,
+      transparent 8px,
+      rgba(160, 200, 240, 0.06) 8px,
+      rgba(160, 200, 240, 0.06) 10px
+    );
+  background-size: 60px 60px, 80px 80px;
+  animation: rain-fall 0.4s linear infinite;
 }
 
 @keyframes rain-fall {
-  0% { background-position: 0 0; }
-  100% { background-position: 20px 100px; }
+  0% { background-position: 0 0, 20px 0; }
+  100% { background-position: 15px 60px, 35px 80px; }
 }
 
-/* Fire effect - warm glow */
+/* ==================== THUNDER ==================== */
+.scene-thunder {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  background: radial-gradient(ellipse at 50% 0%, rgba(200, 180, 255, 0.1) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.scene-thunder.flash {
+  animation: lightning 0.3s ease-out;
+}
+
+@keyframes lightning {
+  0% { opacity: 0; background-color: transparent; }
+  5% { opacity: 1; background-color: rgba(255, 255, 255, 0.6); }
+  10% { opacity: 0.3; background-color: rgba(200, 180, 255, 0.2); }
+  15% { opacity: 0.9; background-color: rgba(255, 255, 255, 0.5); }
+  25% { opacity: 0.4; background-color: rgba(180, 160, 255, 0.15); }
+  100% { opacity: 0; background-color: transparent; }
+}
+
+/* ==================== FIRE ==================== */
 .scene-fire {
   position: absolute;
   inset: 0;
   opacity: 0;
-  transition: opacity 1s ease;
-  background: radial-gradient(ellipse at 50% 120%,
-    rgba(232, 168, 124, 0.15) 0%,
-    transparent 50%);
+  transition: opacity 1.5s ease;
   pointer-events: none;
 }
 
 .scene-fire.active {
   opacity: 1;
-  animation: fire-flicker 3s ease-in-out infinite;
+}
+
+/* Main fire glow from bottom */
+.scene-fire::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 120% 80% at 50% 110%,
+      rgba(255, 140, 50, 0.35) 0%,
+      rgba(255, 100, 30, 0.2) 30%,
+      rgba(200, 60, 20, 0.1) 50%,
+      transparent 70%);
+  animation: fire-glow 2s ease-in-out infinite;
+}
+
+/* Flickering overlay */
+.scene-fire::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 40% 115%, rgba(255, 180, 80, 0.2) 0%, transparent 50%),
+    radial-gradient(ellipse 60% 50% at 60% 120%, rgba(255, 120, 40, 0.15) 0%, transparent 45%);
+  animation: fire-flicker 0.15s ease-in-out infinite alternate;
+}
+
+@keyframes fire-glow {
+  0%, 100% { opacity: 0.9; transform: scale(1); }
+  25% { opacity: 1; transform: scale(1.02); }
+  50% { opacity: 0.85; transform: scale(0.98); }
+  75% { opacity: 1; transform: scale(1.01); }
 }
 
 @keyframes fire-flicker {
-  0%, 100% { opacity: 0.8; }
-  25% { opacity: 1; }
-  50% { opacity: 0.7; }
-  75% { opacity: 0.95; }
+  0% { opacity: 0.7; }
+  100% { opacity: 1; }
 }
 
-/* Forest effect - dappled green */
+/* ==================== FOREST ==================== */
 .scene-forest {
   position: absolute;
   inset: 0;
   opacity: 0;
-  transition: opacity 1s ease;
-  background:
-    radial-gradient(ellipse at 20% 30%, rgba(133, 200, 138, 0.08) 0%, transparent 40%),
-    radial-gradient(ellipse at 80% 70%, rgba(133, 200, 138, 0.06) 0%, transparent 40%),
-    radial-gradient(ellipse at 50% 50%, rgba(100, 150, 100, 0.05) 0%, transparent 60%);
+  transition: opacity 1.5s ease;
   pointer-events: none;
 }
 
 .scene-forest.active {
   opacity: 1;
-  animation: forest-sway 8s ease-in-out infinite;
+}
+
+/* Dappled sunlight through trees */
+.scene-forest::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 40% 50% at 15% 20%, rgba(120, 200, 100, 0.2) 0%, transparent 50%),
+    radial-gradient(ellipse 35% 45% at 75% 30%, rgba(100, 180, 80, 0.18) 0%, transparent 45%),
+    radial-gradient(ellipse 50% 40% at 50% 60%, rgba(80, 160, 60, 0.15) 0%, transparent 55%),
+    radial-gradient(ellipse 30% 35% at 85% 75%, rgba(90, 170, 70, 0.12) 0%, transparent 40%),
+    radial-gradient(ellipse 45% 55% at 25% 80%, rgba(110, 190, 90, 0.14) 0%, transparent 50%),
+    linear-gradient(to bottom, rgba(50, 100, 40, 0.15) 0%, rgba(30, 80, 25, 0.2) 100%);
+  animation: forest-sway 6s ease-in-out infinite;
+}
+
+/* Light rays */
+.scene-forest::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(160deg, rgba(200, 255, 150, 0.08) 0%, transparent 30%),
+    linear-gradient(140deg, transparent 60%, rgba(180, 230, 130, 0.05) 80%, transparent 100%);
+  animation: forest-rays 8s ease-in-out infinite alternate;
 }
 
 @keyframes forest-sway {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.02); }
+  0%, 100% { transform: scale(1) translateX(0); }
+  33% { transform: scale(1.03) translateX(5px); }
+  66% { transform: scale(0.98) translateX(-3px); }
 }
 
-/* Waves effect - blue undulation */
+@keyframes forest-rays {
+  0% { opacity: 0.6; }
+  100% { opacity: 1; }
+}
+
+/* ==================== WAVES ==================== */
 .scene-waves {
   position: absolute;
   inset: 0;
   opacity: 0;
-  transition: opacity 1s ease;
-  background: linear-gradient(to top,
-    rgba(103, 212, 232, 0.1) 0%,
-    transparent 40%);
+  transition: opacity 1.5s ease;
   pointer-events: none;
 }
 
@@ -106,29 +202,51 @@
   opacity: 1;
 }
 
+/* Ocean gradient */
 .scene-waves::before {
   content: '';
   position: absolute;
-  bottom: 0;
-  left: -50%;
-  right: -50%;
-  height: 200px;
-  background: rgba(103, 212, 232, 0.05);
-  border-radius: 50%;
-  animation: wave-motion 6s ease-in-out infinite;
+  inset: 0;
+  background:
+    linear-gradient(to top,
+      rgba(40, 150, 180, 0.35) 0%,
+      rgba(50, 130, 170, 0.25) 20%,
+      rgba(60, 110, 160, 0.15) 40%,
+      transparent 60%);
+}
+
+/* Wave animation */
+.scene-waves::after {
+  content: '';
+  position: absolute;
+  bottom: -10%;
+  left: -20%;
+  right: -20%;
+  height: 50%;
+  background:
+    radial-gradient(ellipse 100% 100% at 50% 100%, rgba(80, 180, 220, 0.2) 0%, transparent 60%),
+    radial-gradient(ellipse 80% 80% at 30% 100%, rgba(60, 160, 200, 0.15) 0%, transparent 50%),
+    radial-gradient(ellipse 90% 90% at 70% 100%, rgba(70, 170, 210, 0.18) 0%, transparent 55%);
+  animation: wave-motion 7s ease-in-out infinite;
 }
 
 @keyframes wave-motion {
-  0%, 100% { transform: translateY(0) scaleY(1); }
-  50% { transform: translateY(-20px) scaleY(0.9); }
+  0%, 100% {
+    transform: translateY(0) scaleY(1) scaleX(1);
+    opacity: 0.9;
+  }
+  50% {
+    transform: translateY(-30px) scaleY(0.85) scaleX(1.05);
+    opacity: 1;
+  }
 }
 
-/* Cafe effect - warm bokeh */
+/* ==================== CAFE ==================== */
 .scene-cafe {
   position: absolute;
   inset: 0;
   opacity: 0;
-  transition: opacity 1s ease;
+  transition: opacity 1.5s ease;
   pointer-events: none;
 }
 
@@ -136,30 +254,44 @@
   opacity: 1;
 }
 
+/* Warm ambient glow */
 .scene-cafe::before {
   content: '';
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(circle at 20% 30%, rgba(212, 165, 116, 0.15) 0%, transparent 15%),
-    radial-gradient(circle at 80% 20%, rgba(232, 168, 124, 0.1) 0%, transparent 10%),
-    radial-gradient(circle at 60% 70%, rgba(212, 165, 116, 0.12) 0%, transparent 12%),
-    radial-gradient(circle at 30% 80%, rgba(232, 168, 124, 0.08) 0%, transparent 8%),
-    radial-gradient(circle at 90% 60%, rgba(200, 150, 100, 0.1) 0%, transparent 10%);
-  animation: bokeh-float 10s ease-in-out infinite;
+    radial-gradient(ellipse 100% 100% at 50% 50%, rgba(180, 120, 60, 0.12) 0%, transparent 70%),
+    linear-gradient(to bottom, rgba(150, 100, 50, 0.08) 0%, rgba(120, 80, 40, 0.15) 100%);
+}
+
+/* Bokeh lights */
+.scene-cafe::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle 80px at 15% 25%, rgba(255, 200, 120, 0.25) 0%, rgba(255, 180, 100, 0.1) 30%, transparent 60%),
+    radial-gradient(circle 60px at 85% 20%, rgba(255, 190, 110, 0.2) 0%, rgba(255, 170, 90, 0.08) 35%, transparent 55%),
+    radial-gradient(circle 100px at 70% 65%, rgba(255, 210, 130, 0.22) 0%, rgba(255, 185, 105, 0.09) 25%, transparent 50%),
+    radial-gradient(circle 50px at 25% 75%, rgba(255, 195, 115, 0.18) 0%, rgba(255, 175, 95, 0.07) 40%, transparent 65%),
+    radial-gradient(circle 70px at 55% 40%, rgba(255, 205, 125, 0.15) 0%, rgba(255, 180, 100, 0.06) 30%, transparent 55%),
+    radial-gradient(circle 40px at 90% 80%, rgba(255, 185, 105, 0.16) 0%, transparent 50%);
+  animation: bokeh-float 12s ease-in-out infinite;
 }
 
 @keyframes bokeh-float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
+  0%, 100% { transform: translateY(0) scale(1); opacity: 0.9; }
+  25% { transform: translateY(-8px) scale(1.02); opacity: 1; }
+  50% { transform: translateY(-5px) scale(0.98); opacity: 0.95; }
+  75% { transform: translateY(-12px) scale(1.01); opacity: 1; }
 }
 
-/* Wind effect - subtle movement */
+/* ==================== WIND ==================== */
 .scene-wind {
   position: absolute;
   inset: 0;
   opacity: 0;
-  transition: opacity 1s ease;
+  transition: opacity 1.5s ease;
   pointer-events: none;
 }
 
@@ -167,30 +299,46 @@
   opacity: 1;
 }
 
+/* Misty wind streaks */
 .scene-wind::before {
   content: '';
   position: absolute;
   inset: -50%;
   background:
-    radial-gradient(ellipse at 30% 50%, rgba(148, 163, 184, 0.05) 0%, transparent 30%),
-    radial-gradient(ellipse at 70% 30%, rgba(148, 163, 184, 0.04) 0%, transparent 25%);
-  animation: wind-drift 12s ease-in-out infinite;
+    linear-gradient(95deg, transparent 0%, rgba(180, 200, 220, 0.08) 20%, transparent 40%),
+    linear-gradient(85deg, transparent 30%, rgba(160, 180, 200, 0.06) 50%, transparent 70%),
+    linear-gradient(100deg, transparent 50%, rgba(170, 190, 210, 0.07) 70%, transparent 90%);
+  animation: wind-blow 8s ease-in-out infinite;
 }
 
-@keyframes wind-drift {
-  0%, 100% { transform: translateX(0) rotate(0deg); }
-  50% { transform: translateX(30px) rotate(2deg); }
+/* Secondary wind layer */
+.scene-wind::after {
+  content: '';
+  position: absolute;
+  inset: -30%;
+  background:
+    radial-gradient(ellipse 150% 50% at 0% 50%, rgba(150, 170, 190, 0.1) 0%, transparent 50%),
+    radial-gradient(ellipse 100% 40% at 100% 40%, rgba(140, 160, 180, 0.08) 0%, transparent 45%);
+  animation: wind-gust 5s ease-in-out infinite 2s;
 }
 
-/* Night effect - stars */
+@keyframes wind-blow {
+  0% { transform: translateX(-20%) rotate(-1deg); opacity: 0.6; }
+  50% { transform: translateX(20%) rotate(1deg); opacity: 1; }
+  100% { transform: translateX(-20%) rotate(-1deg); opacity: 0.6; }
+}
+
+@keyframes wind-gust {
+  0%, 100% { transform: translateX(-10%) scaleX(0.9); opacity: 0.5; }
+  50% { transform: translateX(15%) scaleX(1.1); opacity: 0.9; }
+}
+
+/* ==================== NIGHT ==================== */
 .scene-night {
   position: absolute;
   inset: 0;
   opacity: 0;
-  transition: opacity 1s ease;
-  background: linear-gradient(to bottom,
-    rgba(50, 50, 80, 0.2) 0%,
-    rgba(20, 20, 40, 0.1) 100%);
+  transition: opacity 1.5s ease;
   pointer-events: none;
 }
 
@@ -198,48 +346,52 @@
   opacity: 1;
 }
 
+/* Deep night sky gradient */
 .scene-night::before {
   content: '';
   position: absolute;
   inset: 0;
+  background:
+    radial-gradient(ellipse 150% 100% at 50% 0%, rgba(30, 30, 80, 0.4) 0%, transparent 60%),
+    linear-gradient(to bottom,
+      rgba(20, 20, 60, 0.3) 0%,
+      rgba(15, 15, 45, 0.25) 50%,
+      rgba(10, 10, 30, 0.2) 100%);
+}
+
+/* Stars - multiple layers for depth */
+.scene-night::after {
+  content: '';
+  position: absolute;
+  inset: 0;
   background-image:
-    radial-gradient(1px 1px at 10% 20%, rgba(255,255,255,0.5) 50%, transparent 50%),
-    radial-gradient(1px 1px at 30% 50%, rgba(255,255,255,0.4) 50%, transparent 50%),
-    radial-gradient(1px 1px at 50% 10%, rgba(255,255,255,0.6) 50%, transparent 50%),
-    radial-gradient(1px 1px at 70% 40%, rgba(255,255,255,0.3) 50%, transparent 50%),
-    radial-gradient(1px 1px at 90% 70%, rgba(255,255,255,0.5) 50%, transparent 50%),
-    radial-gradient(2px 2px at 25% 80%, rgba(255,255,255,0.4) 50%, transparent 50%),
-    radial-gradient(1px 1px at 85% 15%, rgba(255,255,255,0.5) 50%, transparent 50%),
-    radial-gradient(1px 1px at 15% 65%, rgba(255,255,255,0.35) 50%, transparent 50%),
-    radial-gradient(1px 1px at 45% 85%, rgba(255,255,255,0.45) 50%, transparent 50%),
-    radial-gradient(1px 1px at 75% 5%, rgba(255,255,255,0.4) 50%, transparent 50%),
-    radial-gradient(1px 1px at 5% 45%, rgba(255,255,255,0.3) 50%, transparent 50%),
-    radial-gradient(2px 2px at 65% 55%, rgba(255,255,255,0.35) 50%, transparent 50%);
-  animation: stars-twinkle 4s ease-in-out infinite;
+    /* Bright stars */
+    radial-gradient(2px 2px at 10% 15%, rgba(255,255,255,0.9) 50%, transparent 50%),
+    radial-gradient(2px 2px at 85% 25%, rgba(255,255,255,0.85) 50%, transparent 50%),
+    radial-gradient(3px 3px at 45% 8%, rgba(255,255,255,0.95) 50%, transparent 50%),
+    radial-gradient(2px 2px at 70% 45%, rgba(255,255,255,0.8) 50%, transparent 50%),
+    radial-gradient(2px 2px at 25% 55%, rgba(255,255,255,0.85) 50%, transparent 50%),
+    /* Medium stars */
+    radial-gradient(1.5px 1.5px at 5% 35%, rgba(255,255,255,0.7) 50%, transparent 50%),
+    radial-gradient(1.5px 1.5px at 35% 28%, rgba(255,255,255,0.65) 50%, transparent 50%),
+    radial-gradient(1.5px 1.5px at 62% 18%, rgba(255,255,255,0.7) 50%, transparent 50%),
+    radial-gradient(1.5px 1.5px at 92% 48%, rgba(255,255,255,0.6) 50%, transparent 50%),
+    radial-gradient(1.5px 1.5px at 18% 72%, rgba(255,255,255,0.65) 50%, transparent 50%),
+    radial-gradient(1.5px 1.5px at 78% 68%, rgba(255,255,255,0.7) 50%, transparent 50%),
+    /* Dim stars */
+    radial-gradient(1px 1px at 15% 42%, rgba(255,255,255,0.5) 50%, transparent 50%),
+    radial-gradient(1px 1px at 52% 35%, rgba(255,255,255,0.45) 50%, transparent 50%),
+    radial-gradient(1px 1px at 88% 12%, rgba(255,255,255,0.5) 50%, transparent 50%),
+    radial-gradient(1px 1px at 38% 62%, rgba(255,255,255,0.4) 50%, transparent 50%),
+    radial-gradient(1px 1px at 72% 78%, rgba(255,255,255,0.5) 50%, transparent 50%),
+    radial-gradient(1px 1px at 8% 88%, rgba(255,255,255,0.45) 50%, transparent 50%),
+    radial-gradient(1px 1px at 95% 65%, rgba(255,255,255,0.4) 50%, transparent 50%),
+    radial-gradient(1px 1px at 28% 92%, rgba(255,255,255,0.5) 50%, transparent 50%),
+    radial-gradient(1px 1px at 58% 82%, rgba(255,255,255,0.45) 50%, transparent 50%);
+  animation: stars-twinkle 3s ease-in-out infinite;
 }
 
 @keyframes stars-twinkle {
-  0%, 100% { opacity: 0.7; }
+  0%, 100% { opacity: 0.8; }
   50% { opacity: 1; }
-}
-
-/* Thunder flash */
-.scene-thunder {
-  position: absolute;
-  inset: 0;
-  opacity: 0;
-  background: rgba(255, 255, 255, 0.03);
-  pointer-events: none;
-}
-
-.scene-thunder.flash {
-  animation: lightning 0.2s ease;
-}
-
-@keyframes lightning {
-  0% { opacity: 0; }
-  10% { opacity: 0.8; }
-  20% { opacity: 0.2; }
-  30% { opacity: 0.6; }
-  100% { opacity: 0; }
 }
