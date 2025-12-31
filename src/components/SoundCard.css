@@ -1,0 +1,150 @@
+.sound-card {
+  position: relative;
+  background: var(--bg-card);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 24px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  user-select: none;
+}
+
+.sound-card:hover {
+  background: var(--bg-card-active);
+  transform: translateY(-2px);
+}
+
+.sound-card:active {
+  transform: translateY(0);
+}
+
+.sound-card.active {
+  background: var(--bg-card-active);
+  border-color: var(--border-active);
+  box-shadow:
+    0 0 30px var(--sound-glow, var(--accent-glow)),
+    inset 0 0 30px var(--sound-glow-subtle, rgba(232, 168, 124, 0.05));
+}
+
+.sound-icon {
+  font-size: 36px;
+  line-height: 1;
+  transition: transform 0.3s ease;
+}
+
+.sound-card.active .sound-icon {
+  animation: icon-float 3s ease-in-out infinite;
+}
+
+@keyframes icon-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+.sound-name {
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  transition: color 0.2s ease;
+}
+
+.sound-card.active .sound-name {
+  color: var(--text-primary);
+}
+
+/* Volume slider inside card */
+.sound-volume {
+  width: 100%;
+  height: 4px;
+  -webkit-appearance: none;
+  appearance: none;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  outline: none;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  cursor: pointer;
+}
+
+.sound-card.active .sound-volume {
+  opacity: 1;
+}
+
+.sound-volume::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 14px;
+  height: 14px;
+  background: var(--sound-color, var(--accent));
+  border-radius: 50%;
+  cursor: grab;
+  box-shadow: 0 0 10px var(--sound-glow, var(--accent-glow));
+  transition: transform 0.15s ease;
+}
+
+.sound-volume::-webkit-slider-thumb:active {
+  cursor: grabbing;
+  transform: scale(1.2);
+}
+
+.sound-volume::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  background: var(--sound-color, var(--accent));
+  border-radius: 50%;
+  cursor: grab;
+  border: none;
+  box-shadow: 0 0 10px var(--sound-glow, var(--accent-glow));
+}
+
+.sound-volume::-moz-range-thumb:active {
+  cursor: grabbing;
+}
+
+.sound-volume::-moz-range-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  height: 4px;
+}
+
+/* Active indicator ring */
+.sound-card.active::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: 22px;
+  border: 2px solid var(--sound-color, var(--accent));
+  opacity: 0.3;
+  animation: pulse-ring 2s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes pulse-ring {
+  0%, 100% { opacity: 0.3; transform: scale(1); }
+  50% { opacity: 0.15; transform: scale(1.02); }
+}
+
+/* Disabled state for slider when not active */
+.sound-volume:disabled {
+  cursor: default;
+}
+
+@media (max-width: 480px) {
+  .sound-card {
+    padding: 16px;
+    gap: 8px;
+  }
+
+  .sound-icon {
+    font-size: 28px;
+  }
+
+  .sound-name {
+    font-size: 12px;
+  }
+}
